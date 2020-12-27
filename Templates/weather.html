@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+<link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/sscc.css') }}">
+  </head>
+  <body>
+
+
+
+<nav class="navbar navbar-light bg-light navbar-dark bg-dark">
+  <span class="navbar-brand mb-0 h1 navbar-brand" >Want to know the weather</span>
+</nav>
+<br>
+
+
+<div id="page-wrap">
+
+<form method='POST' class="form-inline">
+  <input class="input form-control mr-sm-2 " name="city" type="text" placeholder="City name">
+  <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Add city</button>
+
+</form>
+<br>
+{# get_flashed_messages() is auto sent to the template with the flash() call #}
+{% with messages =get_flashed_messages(with_categories=True)%}
+{%if messages%}
+    {% for category,message in messages  %}
+    {%set message_class="alert-success"%}
+    {% if category=='error'%}
+    {%set message_class="alert-danger"%}
+    {%endif%}
+
+      <div  class="alert {{message_class}}" role="alert" >
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" class="fade close">
+          <span aria-hidden="true">&times;</span>
+        </button >
+        {{message}}
+        </div>
+
+    {% endfor %}
+    {%endif%}
+    {%endwith%}
+<br>
+{% for weather in weather_data%}
+
+
+<div class="card mb-3" style="max-width: 300px; max-height:150px">
+  <div class="row no-gutters">
+    <div class="col-md-4">
+      <img src="https://openweathermap.org/img/w/{{weather.icon}}.png" alt="..." width="30" height="40">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{weather.city}}</h5>
+        <p class="card-text">{{weather.temperatue}}
+          <br>{{weather.description}}
+        </p>
+
+<a href="{{url_for('delete_city',name=weather.city)}}" class="card-link">
+<button type="button" class="close" aria-label="Close">
+  <span aria-hidden="true" >&times;</span>
+</button>
+      </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+</div>
+  </body>
+</html>
